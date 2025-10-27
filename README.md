@@ -32,8 +32,8 @@ team begins the significant coding tasks for your project.
 
 ## Requirements
 As with the NumberTriangle assignment, you need to continue to demonstrate use of Issues and PRs.
-- [ ] your repo must contain at least one closed issue, one closed PR, and two commits
-- [ ] all provided tests must pass
+- [X] your repo must contain at least one closed issue, one closed PR, and two commits
+- [X] all provided tests must pass
 
 ---
 
@@ -71,7 +71,7 @@ Note: The example in the documentation doesn't show it, but if you specify a bre
 
 ### Task 1:
 
-- [ ] Complete the `DogApiBreedFetcher` class.
+- [X] Complete the `DogApiBreedFetcher` class.
 
 > This is probably the most involved part of the code, as
 > you need to read the API documentation, make the API call,
@@ -82,11 +82,11 @@ Note: The example in the documentation doesn't show it, but if you specify a bre
 
 ### Task 2:
 
-- [ ] Complete the `CachingBreedFetcher` class.
+- [X] Complete the `CachingBreedFetcher` class.
 
 ### Task 3:
 
-- [ ] Complete the `Main` class.
+- [X] Complete the `Main` class.
 
 ### Task 4:
 
