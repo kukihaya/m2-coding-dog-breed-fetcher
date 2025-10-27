@@ -25,10 +25,6 @@ public class DogApiBreedFetcher implements BreedFetcher {
      */
     @Override
     public List<String> getSubBreeds(String breed) {
-        // TODO Task 1: Complete this method based on its provided documentation
-        //      and the documentation for the dog.ceo API. You may find it helpful
-        //      to refer to the examples of using OkHttpClient from the last lab,
-        //      as well as the code for parsing JSON responses.
         // return statement included so that the starter code can compile and run.
         if (breed == null || breed.isBlank()) {
             throw new BreedNotFoundException("Breed name must not be empty.");
@@ -48,7 +44,6 @@ public class DogApiBreedFetcher implements BreedFetcher {
             }
             String body = response.body().string();
 
-            // HTTP error? Treat as not found (per spec).
             if (!response.isSuccessful()) {
                 throw new BreedNotFoundException("Failed to fetch sub-breeds for '" + breed + "': " + body);
             }
@@ -56,7 +51,6 @@ public class DogApiBreedFetcher implements BreedFetcher {
             JSONObject json = new JSONObject(body);
             String status = json.optString("status", "");
             if (!"success".equalsIgnoreCase(status)) {
-                // API uses "message" to carry error details when status != success.
                 String apiMsg = json.optString("message", "Breed not found");
                 throw new BreedNotFoundException(apiMsg);
             }
@@ -69,7 +63,6 @@ public class DogApiBreedFetcher implements BreedFetcher {
             return result;
 
         } catch (IOException | org.json.JSONException e) {
-            // Any failure should be surfaced as BreedNotFoundException.
             throw new BreedNotFoundException("Breed not found or request failed for '" + breed + "'.");
         }
     }
