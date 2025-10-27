@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * BreedFetcher implementation that relies on the dog.ceo API.
@@ -24,8 +26,7 @@ public class DogApiBreedFetcher implements BreedFetcher {
      * @throws BreedNotFoundException if the breed does not exist (or if the API call fails for any reason)
      */
     @Override
-    public List<String> getSubBreeds(String breed) {
-        // return statement included so that the starter code can compile and run.
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
         if (breed == null || breed.isBlank()) {
             throw new BreedNotFoundException("Breed name must not be empty.");
         }
@@ -42,8 +43,10 @@ public class DogApiBreedFetcher implements BreedFetcher {
             if (response.body() == null) {
                 throw new BreedNotFoundException("Empty response from API for breed: " + breed);
             }
+
             String body = response.body().string();
 
+            // HTTP error? Treat as not found.
             if (!response.isSuccessful()) {
                 throw new BreedNotFoundException("Failed to fetch sub-breeds for '" + breed + "': " + body);
             }
@@ -60,10 +63,12 @@ public class DogApiBreedFetcher implements BreedFetcher {
             for (int i = 0; i < arr.length(); i++) {
                 result.add(arr.getString(i));
             }
+
             return result;
 
         } catch (IOException | org.json.JSONException e) {
-            throw new BreedNotFoundException("Breed not found or request failed for '" + breed + "'.");
+            // Any IO or JSON parsing issue → treat as breed not found
+            throw new BreedNotFoundException("Breed not found or request failed for '" + breed + "'.", e);
         }
     }
 }
