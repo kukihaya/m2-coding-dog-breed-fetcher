@@ -90,7 +90,7 @@ Note: The example in the documentation doesn't show it, but if you specify a bre
 
 ### Task 4:
 
-- [ ] Originally, the `BreedFetcher.BreedNotFoundException` exception was designed as a subclass of `RuntimeException`.
+- [X] Originally, the `BreedFetcher.BreedNotFoundException` exception was designed as a subclass of `RuntimeException`.
   Update the code so that this exception is a **checked exception** and modify any other code as needed so that the code
   is able to compile and run.
 
