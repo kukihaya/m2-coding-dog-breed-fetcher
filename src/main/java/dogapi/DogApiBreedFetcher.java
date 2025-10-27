@@ -30,6 +30,47 @@ public class DogApiBreedFetcher implements BreedFetcher {
         //      to refer to the examples of using OkHttpClient from the last lab,
         //      as well as the code for parsing JSON responses.
         // return statement included so that the starter code can compile and run.
-        return new ArrayList<>();
+        if (breed == null || breed.isBlank()) {
+            throw new BreedNotFoundException("Breed name must not be empty.");
+        }
+
+        final String normalized = breed.trim().toLowerCase(Locale.ROOT);
+        final String url = "https://dog.ceo/api/breed/" + normalized + "/list";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.body() == null) {
+                throw new BreedNotFoundException("Empty response from API for breed: " + breed);
+            }
+            String body = response.body().string();
+
+            // HTTP error? Treat as not found (per spec).
+            if (!response.isSuccessful()) {
+                throw new BreedNotFoundException("Failed to fetch sub-breeds for '" + breed + "': " + body);
+            }
+
+            JSONObject json = new JSONObject(body);
+            String status = json.optString("status", "");
+            if (!"success".equalsIgnoreCase(status)) {
+                // API uses "message" to carry error details when status != success.
+                String apiMsg = json.optString("message", "Breed not found");
+                throw new BreedNotFoundException(apiMsg);
+            }
+
+            JSONArray arr = json.getJSONArray("message");
+            List<String> result = new ArrayList<>(arr.length());
+            for (int i = 0; i < arr.length(); i++) {
+                result.add(arr.getString(i));
+            }
+            return result;
+
+        } catch (IOException | org.json.JSONException e) {
+            // Any failure should be surfaced as BreedNotFoundException.
+            throw new BreedNotFoundException("Breed not found or request failed for '" + breed + "'.");
+        }
     }
 }
